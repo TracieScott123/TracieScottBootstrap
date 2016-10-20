@@ -1,0 +1,50 @@
+---
+title: "Bootstrap4"
+author: "Tracie Scott"
+date: "October 19, 2016"
+output:
+  html_document:
+  keep_md: true
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Second exponential distribution example; sample size 15, rate .2
+
+```{r ExpBootstrapl}
+# Exponenial bootstrap
+R <- 1000                                    # R: number of replications
+bootmean <- numeric(R)                       # bootmean: vector of mean values w R values
+x <- rexp(n=15, rate = .2)                    # X: vector containing the sample to bootstrap
+FirstMean <- mean(x)                         # FirstMean: mean of the first sample
+bootSE <- sd(x)/sqrt(length(x))              # bootSE: SE of the first sample
+
+for (i in 1:R) {                             # create a loop from 1 to R  (replications)
+  # create a new sample based on the original sample with replacement) 
+  bootsample <- sample(x, size=length(x), replace=TRUE)     
+   # append the mean of the new sample to a vector
+  bootmean[i] <- mean(bootsample)                          
+}
+
+```
+
+## Diagnostics
+```{r variables}
+x                                            # display X (sample)
+FirstMean                                    # display Firstmean (mean of the sample)
+bootSE                                       # display bootSE (SE for the sample)  
+summary(bootmean)                             # 5 number summary of vector containing bootstrap sample means
+```
+
+```{r histogram}
+hist(bootmean)                              # histogram of mean scores from bootstrap vector
+```
+
+* histogram - Exponential distribution of mean values generated from 1000 samples; look for tail
+
+```{r qqplot}
+qqnorm(bootmean)                            # qqplot of mean scores from bootstrap vector
+```
+* QQPlot - mean values conform to the diagonal of the qqplot, about as well as for normal distribution
